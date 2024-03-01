@@ -1,5 +1,9 @@
 Ce dépôt contient les notebooks utilisé pendant la formation Azure Databricks
 
+## Exemple de projet
+
+* Un projet de ML avec Databricks : https://github.com/AnastasiaProkaieva/MlFlow_Foundational_Training
+* Un pipeline Azure Devops pour déployer du ML avec Python : https://github.com/microsoft/MLOpsPython/tree/master 
 
 ## Liens utiles 
 
