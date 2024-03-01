@@ -23,28 +23,11 @@
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ##![Spark Logo Tiny](https://files.training.databricks.com/images/105/logo_spark_tiny.png) Getting Started
-# MAGIC
-# MAGIC Run the following cell to configure our "classroom."
-
-# COMMAND ----------
-
-# MAGIC %run "./Includes/Classroom-Setup"
-
-# COMMAND ----------
-
-# MAGIC %md
 # MAGIC Prepare the data source.
 
 # COMMAND ----------
 
-(source, sasEntity, sasToken) = getAzureDataSource()
-
-spark.conf.set(sasEntity, sasToken)
-
-# COMMAND ----------
-
-path = source + "/wikipedia/pagecounts/staging_parquet_en_only_clean/"
+path = "dbfs:/databricks-datasets/wikipedia-datasets/data-001/pagecounts/sample/"
 files = dbutils.fs.ls(path)
 display(files)
 
@@ -60,13 +43,13 @@ display(files)
 
 # COMMAND ----------
 
-parquetDir = source + "/wikipedia/pagecounts/staging_parquet_en_only_clean/"
+file = "dbfs:/databricks-datasets/wikipedia-datasets/data-001/pagecounts/sample/pagecounts-20151124-170000"
 
 # COMMAND ----------
 
 pagecountsEnAllDF = (spark  # Our SparkSession & Entry Point
   .read                     # Our DataFrameReader
-  .parquet(parquetDir)      # Returns an instance of DataFrame
+  .csv(file)      # Returns an instance of DataFrame
 )
 print(pagecountsEnAllDF)    # Python hack to see the data type
 

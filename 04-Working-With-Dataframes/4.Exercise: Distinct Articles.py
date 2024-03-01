@@ -24,25 +24,11 @@
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ##![Spark Logo Tiny](https://files.training.databricks.com/images/105/logo_spark_tiny.png) Getting Started
-# MAGIC
-# MAGIC Run the following cell to configure our "classroom."
-
-# COMMAND ----------
-
-# MAGIC %run "./Includes/Classroom-Setup"
-
-# COMMAND ----------
-
-# MAGIC %md
 # MAGIC ##![Spark Logo Tiny](https://files.training.databricks.com/images/105/logo_spark_tiny.png) Show Your Work
 
 # COMMAND ----------
 
-(source, sasEntity, sasToken) = getAzureDataSource()
-spark.conf.set(sasEntity, sasToken)
-
-path = source + "/wikipedia/pagecounts/staging_parquet_en_only_clean/"
+path = "dbfs:/databricks-datasets/wikipedia-datasets/data-001/pagecounts/sample/pagecounts-20151124-170000"
 
 # COMMAND ----------
 
@@ -51,7 +37,7 @@ path = source + "/wikipedia/pagecounts/staging_parquet_en_only_clean/"
 
 df = (spark                    # Our SparkSession & Entry Point
   .read                        # Our DataFrameReader
-  <<FILL_IN>>                  # Read in the parquet files
+  <<FILL_IN>>                  # Read in the file
   <<FILL_IN>>                  # Reduce the columns to just the one
   <<FILL_IN>>                  # Produce a unique set of values
 )
@@ -67,5 +53,5 @@ print("Distinct Articles: {0:,}".format(totalArticles))
 
 # COMMAND ----------
 
-expected = 1783138
+expected = 1783138 # Not sure of result with this files, need to check
 assert totalArticles == expected, "Expected the total to be " + str(expected) + " but found " + str(totalArticles)

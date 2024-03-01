@@ -15,18 +15,27 @@
 
 # COMMAND ----------
 
+path = "dbfs:/databricks-datasets/learning-spark-v2/iot-devices/iot_devices.json"
+files = dbutils.fs.ls(path)
+display(files)
+
+# COMMAND ----------
+
 schemaDDL = "NAME STRING, STATION STRING, LATITUDE FLOAT, LONGITUDE FLOAT, ELEVATION FLOAT, DATE DATE, UNIT STRING, TAVG FLOAT"
 
-sourcePath = "/mnt/training/weather/StationData/stationData.parquet/"
+sourcePath = "dbfs:/databricks-datasets/learning-spark-v2/iot-devices/iot_devices.json"
 
 countsDF = (spark.read
-  .format("parquet")
-  .schema(schemaDDL)
+  .format("json")
   .load(sourcePath)
-  .groupBy("NAME", "UNIT").count()
+  .groupBy("device_name").count()
   .withColumnRenamed("count", "counts")
-  .orderBy("NAME")
+  .orderBy("device_name")
 )
+
+# COMMAND ----------
+
+display(countsDF)
 
 # COMMAND ----------
 

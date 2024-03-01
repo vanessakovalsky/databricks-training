@@ -29,17 +29,6 @@
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ##![Spark Logo Tiny](https://files.training.databricks.com/images/105/logo_spark_tiny.png) Getting Started
-# MAGIC
-# MAGIC Run the following cell to configure our "classroom."
-
-# COMMAND ----------
-
-# MAGIC %run "./Includes/Classroom-Setup"
-
-# COMMAND ----------
-
-# MAGIC %md
 # MAGIC ##![Spark Logo Tiny](https://files.training.databricks.com/images/105/logo_spark_tiny.png) **The Data Source**
 # MAGIC
 # MAGIC * In this notebook, we will be using a compressed parquet "file" called **pagecounts** (~23 MB file from Wikipedia)
@@ -50,20 +39,14 @@
 
 # COMMAND ----------
 
-(source, sasEntity, sasToken) = getAzureDataSource()
-
-spark.conf.set(sasEntity, sasToken)
-
-# COMMAND ----------
-
-path = source + "/wikipedia/pagecounts/staging_parquet_en_only_clean/"
+path = "dbfs:/databricks-datasets/wikipedia-datasets/data-001/pagecounts/sample/"
 files = dbutils.fs.ls(path)
 display(files)
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC As we can see from the files listed above, this data is stored in <a href="https://parquet.apache.org" target="_blank">Parquet</a> files which can be read in a single command, the result of which will be a `DataFrame`.
+# MAGIC Vous pouvez voir qu'il y a un seul fichier, celui-ci est au format text sans extension, nous allons le traiter comme un fichier CSV
 
 # COMMAND ----------
 
@@ -75,13 +58,13 @@ display(files)
 
 # COMMAND ----------
 
-parquetDir = source + "/wikipedia/pagecounts/staging_parquet_en_only_clean/"
+file = "dbfs:/databricks-datasets/wikipedia-datasets/data-001/pagecounts/sample/pagecounts-20151124-170000"
 
 # COMMAND ----------
 
 pagecountsEnAllDF = (spark  # Our SparkSession & Entry Point
-  .read                     # Our DataFrameReader
-  .parquet(parquetDir)      # Returns an instance of DataFrame
+  .read                     # Our DataFrameReader     
+  .csv(file)      # Returns an instance of DataFrame
 )
 print(pagecountsEnAllDF)    # Python hack to see the data type
 
@@ -106,7 +89,7 @@ print("Record Count: {0:,}".format( total ))
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC That tells us that there are around 2 million rows in the `DataFrame`.
+# MAGIC That tells us that there are around 7 million rows in the `DataFrame`.
 
 # COMMAND ----------
 

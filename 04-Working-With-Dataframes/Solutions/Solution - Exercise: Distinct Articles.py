@@ -39,10 +39,7 @@
 
 # COMMAND ----------
 
-(source, sasEntity, sasToken) = getAzureDataSource()
-spark.conf.set(sasEntity, sasToken)
-
-path = source + "/wikipedia/pagecounts/staging_parquet_en_only_clean/"
+path = "dbfs:/databricks-datasets/wikipedia-datasets/data-001/pagecounts/sample/pagecounts-20151124-170000"
 
 # COMMAND ----------
 
@@ -56,7 +53,7 @@ parquetDir = "/mnt/training/wikipedia/pagecounts/staging_parquet_en_only_clean/"
 
 df = (spark
   .read
-  .parquet(parquetDir)
+  .csv(parquetDir)
   .select("article")
   .distinct()
 )
@@ -81,7 +78,7 @@ schema = StructType([
 
 totalArticles = (spark.read
   .schema(schema)
-  .parquet(parquetDir)
+  .parquet(path)
   .select("article")
   .distinct()
   .count()

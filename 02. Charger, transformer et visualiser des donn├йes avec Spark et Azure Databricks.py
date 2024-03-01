@@ -9,10 +9,6 @@
 
 # COMMAND ----------
 
-
-
-# COMMAND ----------
-
 # MAGIC %md
 # MAGIC
 # MAGIC ### Etape 1: Définir la localisation des données
@@ -23,18 +19,6 @@
 # MAGIC Pour démarrer, nous définissons la location et le type de fichier. Nous pouvons le faire en utilisant les  [widgets](https://docs.databricks.com/user-guide/notebooks/widgets.html). Les Widgets nous permette de rendre paramètrable l'exécution d'un notebook entier. D'abord nous le créons, puis nous pouvons le référencer tout le long du notebook. 
 # MAGIC
 # MAGIC
-
-# COMMAND ----------
-
-dbutils.widgets.text("container_name", "sample-container", "Container name")
-dbutils.widgets.text("storage_account_access_key", "YOUR_ACCESS_KEY", "Storage Access Key / SAS")
-dbutils.widgets.text("storage_account_name", "STORAGE_ACCOUNT_NAME", "Storage Account Name")
-
-# COMMAND ----------
-
-spark.conf.set(
-  "fs.azure.account.key."+dbutils.widgets.get("storage_account_name")+".blob.core.windows.net",
-  dbutils.widgets.get("storage_account_access_key"))
 
 # COMMAND ----------
 
@@ -53,8 +37,8 @@ spark.conf.set(
 from pyspark.sql.functions import split, explode, col, udf
 from pyspark.sql.types import *
 
-ratingsLocation = "wasbs://"+dbutils.widgets.get("container_name")+"@" +dbutils.widgets.get("storage_account_name")+".blob.core.windows.net/ratings.csv"
-moviesLocation = "wasbs://"+dbutils.widgets.get("container_name")+"@" +dbutils.widgets.get("storage_account_name")+".blob.core.windows.net/movies.csv"
+ratingsLocation = "dbfs:/FileStore/tables/ratings.csv"
+moviesLocation = "dbfs:/FileStore/tables/movies.csv"
 
 print("Ratings file location       " + ratingsLocation)
 print("Movies file location        " + moviesLocation)
@@ -96,12 +80,20 @@ display(movies)
 # transform the timestamp data column to a date column
 # first we cast the int column to Timestamp
 ratingsTemp = ratings \
-  .withColumn("ts", ratings.timestamp.cast("Timestamp")) 
+  .withColumn("date", ratings.timestamp.cast("Timestamp")) 
   
 # then, we cast Timestamp to Date
 ratings = ratingsTemp \
-  .withColumn("reviewDate", ratingsTemp.ts.cast("Date")) \
-  .drop("ts", "timestamp")
+  .withColumn("reviewDate", ratingsTemp.date.cast("Date")) \
+  .drop("date", "timestamp")
+
+# COMMAND ----------
+
+display(ratingsTemp)
+
+# COMMAND ----------
+
+display(ratings)
 
 # COMMAND ----------
 
